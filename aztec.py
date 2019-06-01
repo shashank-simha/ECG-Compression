@@ -1,7 +1,11 @@
 import csv
 import pylab
-import scipy.signal as signal
-import numpy 
+import numpy as np
+
+
+# AZTEC Algorithm
+
+# Read ECG Values from csv file
 
 filename = "ecg_values.csv"
 
@@ -10,23 +14,22 @@ with open(filename, 'r') as csvfile:
 
 csvfile.close()
 
-# Initializations
+# Initializations | AZTEC
 
 ecg_vals = [float(x) for x in ecg_vals]
+
+# Threshold as average of all sample values
 Vth = sum(ecg_vals)/len(ecg_vals)
-Ln = 0
+Ln, t = 0, 0
 V = list()
-t = 0
+Length = list()
 ecg_vals_len = len(ecg_vals)
 Vmax = Vmin = Vmax1 = Vmin1 = 0
-Length = list()
-flag = False
-
 
 def store(v_max, v_min):
+    """Store average amplitude of the plateau and length"""
     V.append((v_max+v_min)/2)
     Length.append(Ln - 1)
-
 
 while t < ecg_vals_len - 1:
     Vmax = Vmin = Vmax1 = Vmin1 = ecg_vals[t]
@@ -52,7 +55,8 @@ while t < ecg_vals_len - 1:
                 Vmax = Vmax1
                 Vmin = Vmin1
 
-# print(V)
+
+# Plot ECG waveforms
 
 ecg = []
 with open('ecg_values.csv', 'r') as csvFile:
@@ -62,7 +66,7 @@ with open('ecg_values.csv', 'r') as csvFile:
 
 csvFile.close()
 
-ecg_final = numpy.array(ecg, dtype=numpy.float32)
+ecg_final = np.array(ecg, dtype=np.float32)
 
 aztecCSV = 'aztec_vals.csv'
 file = open(aztecCSV, 'w', newline='')
@@ -77,7 +81,7 @@ with open('aztec_vals.csv', 'r') as csvFile:
         aztecEcg.append(float(row[0]))
 csvFile.close()
 
-ecg_aztec = numpy.array(aztecEcg, dtype=numpy.float32)
+ecg_aztec = np.array(aztecEcg, dtype=np.float32)
 
 
 hspace = .5
