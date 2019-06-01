@@ -54,23 +54,44 @@ while t < ecg_vals_len - 1:
 
 # print(V)
 
+ecg = []
+with open('ecg_values.csv', 'r') as csvFile:
+    reader = csv.reader(csvFile)
+    for row in reader:
+        ecg.append(float(row[0]))
+
+csvFile.close()
+
+ecg_final = numpy.array(ecg, dtype=numpy.float32)
+
 aztecCSV = 'aztec_vals.csv'
 file = open(aztecCSV, 'w', newline='')
 writer = csv.writer(file)
 writer.writerows(map(lambda x: [x], V))
 file.close()
 
-ecg = []
+aztecEcg = []
 with open('aztec_vals.csv', 'r') as csvFile:
     reader = csv.reader(csvFile)
     for row in reader:
-        ecg.append(float(row[0]))
+        aztecEcg.append(float(row[0]))
 csvFile.close()
 
-ecg_final = numpy.array(ecg, dtype=numpy.float32)
+ecg_aztec = numpy.array(aztecEcg, dtype=numpy.float32)
 
+
+hspace = .5
+pylab.subplots_adjust(hspace=hspace)
+pylab.subplot(2, 1, 1)
 pylab.plot(ecg_final)
 pylab.xlabel('Sample number')
 pylab.ylabel('bit value')
-pylab.title('Aztec Compression ECG')
+pylab.title('Original ECG signal')
+
+pylab.subplot(2, 1, 2)
+pylab.plot(ecg_aztec)
+pylab.xlabel('Sample number')
+pylab.ylabel('bit value')
+pylab.title('ECG After Aztec Compression')
+
 pylab.show()
