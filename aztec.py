@@ -28,7 +28,8 @@ Vmax = Vmin = Vmax1 = Vmin1 = 0
 
 def store(v_max, v_min):
     """Store average amplitude of the plateau and length"""
-    V.append((v_max+v_min)/2)
+    for i in range(Ln):
+        V.append((v_max+v_min)/2)
     Length.append(Ln - 1)
 
 while t < ecg_vals_len - 1:
@@ -55,8 +56,11 @@ while t < ecg_vals_len - 1:
                 Vmax = Vmax1
                 Vmin = Vmin1
 
-
+# append last values to match data length(or run length)
 # Plot ECG waveforms
+for i in range(Ln+1):
+    store(Vmax, Vmin)
+    Ln = 0
 
 ecg = []
 with open('ecg_values.csv', 'r') as csvFile:
