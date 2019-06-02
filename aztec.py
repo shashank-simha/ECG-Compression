@@ -28,7 +28,7 @@ Vmax = Vmin = Vmax1 = Vmin1 = 0
 
 def store(v_max, v_min):
     """Store average amplitude of the plateau and length"""
-    for i in range(Ln):
+    for _ in range(Ln):
         V.append((v_max+v_min)/2)
     Length.append(Ln - 1)
 
@@ -57,11 +57,12 @@ while t < ecg_vals_len - 1:
                 Vmin = Vmin1
 
 # append last values to match data length(or run length)
-# Plot ECG waveforms
-for i in range(Ln+1):
+
+for i in range(Ln + 1):
     store(Vmax, Vmin)
     Ln = 0
 
+# Plot ECG waveforms
 ecg = []
 with open('ecg_values.csv', 'r') as csvFile:
     reader = csv.reader(csvFile)
@@ -86,7 +87,6 @@ with open('aztec_vals.csv', 'r') as csvFile:
 csvFile.close()
 
 ecg_aztec = np.array(aztecEcg, dtype=np.float32)
-
 
 hspace = .5
 pylab.subplots_adjust(hspace=hspace)
